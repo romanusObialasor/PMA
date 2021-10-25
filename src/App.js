@@ -33,7 +33,7 @@ const App = () => {
           <Route exact path="/members" component={AdminMembers} />
           <Route exact path="/create" component={AdminCreate} />
           <Route exact path="/user" component={UserOverView} />
-          <Route exact path="/userProject" component={UserProject} />
+          <Route exact path="/userProject/:id" component={UserProject} />
           <Route exact path="/myProjects" component={MyProjects} />
           <Route exact path="/project" component={Project} />
           <Route exact path="/userCreate" component={UserCreate} />

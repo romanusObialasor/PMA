@@ -1,16 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsBell } from "react-icons/bs";
 import OverViewCard from "./OverViewCard";
 import AdminNav from "./AdminNav";
-import { GlobalProvider } from "../../Auth/GlobalComponent";
 import { app } from "../../base";
 
 const AdminHome = () => {
   const [data, setData] = useState([]);
-  const currentUser = useContext(GlobalProvider);
 
   const fetchData = async () => {
     const authUser = await app.auth().currentUser;
@@ -32,7 +30,6 @@ const AdminHome = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(data);
   }, []);
   return (
     <div style={{ display: "flex" }}>

@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import styled from "styled-components";
 import AdminNav from "./AdminNav";
 import { app } from "../../base";
-import { GlobalProvider } from "../../Auth/GlobalComponent";
 
 const AdminMembers = () => {
-  const currentUser = useContext(GlobalProvider);
-
   const [data, setData] = useState([]);
 
   const fetchData = async () => {

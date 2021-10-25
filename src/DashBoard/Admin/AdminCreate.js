@@ -1,13 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AdminNav from "./AdminNav";
-import { GlobalProvider } from "../../Auth/GlobalComponent";
 import { app } from "../../base";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 
 const AdminCreate = () => {
-  const currentUser = useContext(GlobalProvider);
   const history = useHistory();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

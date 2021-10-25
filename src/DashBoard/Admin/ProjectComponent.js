@@ -42,7 +42,6 @@ const ProjectComponent = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(data);
   }, []);
 
   return (

@@ -1,12 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsBell } from "react-icons/bs";
 import UserTodoCard from "./UserTodoCard";
+import { app } from "../../base";
 import UserNav from "./UserNav";
 
 const MyProjects = () => {
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+
+    if (authUser) {
+      await app
+        .firestore()
+        .collection("Register")
+        .doc(cKey)
+        .collection("user")
+        .doc(authUser.uid)
+        .collection("myTodo")
+        .onSnapshot((snapshot) => {
+          const item = [];
+          snapshot.forEach((doc) => {
+            item.push({ ...doc.data(), id: doc.id });
+          });
+          setData(item);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    console.log(data);
+  }, []);
   return (
     <div style={{ display: "flex" }}>
       <UserNav />
@@ -34,9 +63,14 @@ const MyProjects = () => {
           </Top>
           <span>My Projects</span>
           <Rest>
-            <UserTodoCard to="/project" />
-            <UserTodoCard />
-            <UserTodoCard />
+            {data?.map((props) => (
+              <UserTodoCard
+                to="/project"
+                title={props.title}
+                description={props.description}
+                deadline={props.deadline}
+              />
+            ))}
           </Rest>
         </Wrapper>
       </Container>

@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsBell } from "react-icons/bs";
 import OverViewCard from "../Admin/OverViewCard";
 import UserNav from "./UserNav";
+import { app } from "../../base";
 
 const UserOverView = () => {
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+
+    if (authUser) {
+      await app
+        .firestore()
+        .collection("Register")
+        .doc(`${cKey}`)
+        .collection("adminTodo")
+        .onSnapshot((snapshot) => {
+          const item = [];
+          snapshot.forEach((doc) => {
+            item.push({ ...doc.data(), id: doc.id });
+          });
+          setData(item);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div style={{ display: "flex" }}>
       <UserNav />
@@ -34,9 +60,14 @@ const UserOverView = () => {
           </Top>
           <span>Projects Worked On</span>
           <Rest>
-            <OverViewCard to="/userProject" />
-            <OverViewCard />
-            <OverViewCard />
+            {data?.map((props) => (
+              <OverViewCard
+                to={`/userProject/${props.id}`}
+                title={props.title}
+                description={props.desciption}
+                deadline={props.deadline}
+              />
+            ))}
           </Rest>
         </Wrapper>
       </Container>

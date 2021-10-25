@@ -55,6 +55,7 @@ const SignUp = () => {
           time: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: authUser.user.uid,
         });
+      localStorage.setItem("cKey", cKey);
       setImage("/images/1.png");
       setEmail("");
       setName("");

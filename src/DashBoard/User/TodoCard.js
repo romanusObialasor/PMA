@@ -2,21 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import { AiOutlinePaperClip } from "react-icons/ai";
 
-const TodoCard = ({ status, clr }) => {
+const TodoCard = ({ status, clr, title, description, deadline, member }) => {
   return (
     <Container>
       <Wrapper>
         <Top>
           <Title>
-            <div>.</div>Title
+            <div>.</div>
+            {title}
           </Title>
           <AiOutlinePaperClip cursor="pointer" />
         </Top>
-        <Desciption>Desciption </Desciption>
-        <Images>
-          <Image src="/images/6.jpg" />
-          <Imager src="/images/3.jpg" />
-        </Images>
+        <Desciption>{description} </Desciption>
+        <Dead>
+          <Inner>Deadline:</Inner> {deadline}
+        </Dead>
+        {member?.map((props) => (
+          <Images>
+            <Image src={props.image} />
+            <Imager src="/images/3.jpg" />
+          </Images>
+        ))}
       </Wrapper>
       <Status clr={clr}>{status}</Status>
     </Container>
@@ -24,6 +30,18 @@ const TodoCard = ({ status, clr }) => {
 };
 
 export default TodoCard;
+
+const Inner = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-right: 5px;
+`;
+
+const Dead = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: 30px;
+`;
 
 const Status = styled.div`
   position: absolute;

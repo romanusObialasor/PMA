@@ -1,8 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import UserNav from "./UserNav";
+import { app } from "../../base";
+import firebase from "firebase";
+import { useHistory } from "react-router-dom";
 
 const UserCreate = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+
+  const history = useHistory("");
+
+  const postData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+    if (authUser) {
+      await app
+        .firestore()
+        .collection("Register")
+        .doc(cKey)
+        .collection("user")
+        .doc(authUser.uid)
+        .collection("myTodo")
+        .doc()
+        .set({
+          title: title,
+          description: description,
+          deadline: deadline,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+          craetedBy: authUser.uid,
+        });
+      setTitle("");
+      setDescription("");
+      setDeadline("");
+    }
+    history.push("/myProject");
+  };
   return (
     <div style={{ display: "flex" }}>
       <UserNav />
@@ -12,19 +46,34 @@ const UserCreate = () => {
           <Inputs>
             <InputHolder>
               <Label>Title:</Label>
-              <Input />
+              <Input
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+              />
             </InputHolder>
             <InputHolder>
               <Label>Description:</Label>
-              <TextArea />
+              <TextArea
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
             </InputHolder>
             <InputHolder>
               <Label>Deadline:</Label>
-              <Input />
+              <Input
+                value={deadline}
+                onChange={(e) => {
+                  setDeadline(e.target.value);
+                }}
+              />
             </InputHolder>
           </Inputs>
           <ButttonHolder>
-            <Submit>Create</Submit>
+            <Submit onClick={postData}>Create</Submit>
           </ButttonHolder>
         </Wrapper>
       </Container>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { BiHelpCircle } from "react-icons/bi";
@@ -6,8 +6,39 @@ import { BsBell } from "react-icons/bs";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import TodoCard from "./TodoCard";
 import UserNav from "./UserNav";
+import { app } from "../../base";
+import { useParams } from "react-router-dom";
 
 const UserProject = () => {
+  const { id } = useParams();
+
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+
+    if (authUser) {
+      await app
+        .firestore()
+        .collection("Register")
+        .doc(cKey)
+        .collection("adminTodo")
+        .doc(id)
+        .collection("Todo")
+        .onSnapshot((snapshot) => {
+          const item = [];
+          snapshot.forEach((doc) => {
+            item.push({ ...doc.data(), id: doc.id });
+          });
+          setData(item);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div style={{ display: "flex" }}>
       <UserNav />
@@ -48,7 +79,16 @@ const UserProject = () => {
                     <span>3</span>
                   </TopHolder>
                   <CardHolder>
-                    <TodoCard status="Doing >>" />
+                    {data?.map((props) => (
+                      <TodoCard
+                        status="Doing >>"
+                        key={props.id}
+                        title={props.title}
+                        description={props.desciption}
+                        deadline={props.deadline}
+                        member={props.members}
+                      />
+                    ))}
                   </CardHolder>
                 </WrapperHolder>
               </Holder>

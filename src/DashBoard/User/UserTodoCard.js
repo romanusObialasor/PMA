@@ -3,29 +3,41 @@ import styled from "styled-components";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-const UserTodoCard = ({ to }) => {
+const UserTodoCard = ({ to, title, description, deadline }) => {
   return (
-    <MyLink to={to}>
-      <Container>
-        <Wrapper>
-          <Top>
-            <Title>
-              <div>.</div>Title
-            </Title>
-            <AiOutlinePaperClip cursor="pointer" />
-          </Top>
-          <Desciption>Desciption </Desciption>
-        </Wrapper>
-      </Container>
-    </MyLink>
+    <Container to={to}>
+      <Wrapper>
+        <Top>
+          <Title>
+            <div>.</div>
+            {title}
+          </Title>
+          <AiOutlinePaperClip cursor="pointer" />
+        </Top>
+        <Desciption>{description} </Desciption>
+        <Dead>
+          <Inner>Deadline:</Inner> {deadline}
+        </Dead>
+      </Wrapper>
+    </Container>
   );
 };
 
 export default UserTodoCard;
 
-const MyLink = styled(Link)``;
+const Inner = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-right: 5px;
+`;
 
-const Container = styled.div`
+const Dead = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: -20px;
+`;
+
+const Container = styled(Link)`
   background: white;
   width: 270px;
   margin: 20px;
