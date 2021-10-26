@@ -12,7 +12,7 @@ const MembersCard = ({ name, image, onClick }) => {
             color: "blue",
           }}
         >
-          Name: ,
+          Name:
         </i>
         {name}
       </Name>

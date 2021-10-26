@@ -1,19 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsBell } from "react-icons/bs";
+import { app } from "../../base";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { useParams } from "react-router-dom";
 import ProjectCard from "./ProjectCard";
 import UserNav from "./UserNav";
 import AddUserTodo from "./UserModa/AddUserTodo";
 
 const Project = () => {
-  const [toggle, setToggle] = React.useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const onToggle = () => {
     setToggle(!toggle);
   };
+
+  const { id } = useParams();
+
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+
+    if (authUser) {
+      await app
+        .firestore()
+        .collection("Register")
+        .doc(cKey)
+        .collection("user")
+        .doc(authUser.uid)
+        .collection("myTodo")
+        .doc(id)
+        .collection("Todo")
+        .onSnapshot((snapshot) => {
+          const item = [];
+          snapshot.forEach((doc) => {
+            item.push({ ...doc.data(), id: doc.id });
+          });
+          setData(item);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div style={{ display: "flex" }}>
       <UserNav />
@@ -56,7 +90,12 @@ const Project = () => {
                   <Add onClick={onToggle}>+</Add>
                   {toggle ? <AddUserTodo onToggle={onToggle} /> : null}
                   <CardHolder>
-                    <ProjectCard />
+                    {data?.map((props) => (
+                      <ProjectCard
+                        title={props.title}
+                        description={props.title}
+                      />
+                    ))}
                   </CardHolder>
                 </WrapperHolder>
               </Holder>

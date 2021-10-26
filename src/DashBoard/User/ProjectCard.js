@@ -2,17 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { AiOutlinePaperClip } from "react-icons/ai";
 
-const ProjectCard = () => {
+const ProjectCard = ({ title, description }) => {
   return (
     <Container>
       <Wrapper>
         <Top>
           <Title>
-            <div>.</div>Title
+            <div>.</div>
+            {title}
           </Title>
           <AiOutlinePaperClip cursor="pointer" />
         </Top>
-        <Desciption>Desciption </Desciption>
+        <Desciption>{description}</Desciption>
       </Wrapper>
     </Container>
   );

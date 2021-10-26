@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { app } from "../../../base";
+import firebase from "firebase";
+import { useParams } from "react-router-dom";
 
 const AddUserTodo = ({ onToggle }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const { id } = useParams();
+
+  const postData = async () => {
+    const authUser = await app.auth().currentUser;
+    const cKey = localStorage.getItem("cKey");
+    await app
+      .firestore()
+      .collection("Register")
+      .doc(cKey)
+      .collection("user")
+      .doc(authUser.uid)
+      .collection("myTodo")
+      .doc(id)
+      .collection("Todo")
+      .doc()
+      .set({
+        title: title,
+        desciption: description,
+        deadline: deadline,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: authUser.uid,
+      });
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+  };
   return (
     <Container>
       <Main>
@@ -10,19 +42,34 @@ const AddUserTodo = ({ onToggle }) => {
           <Inputs>
             <InputHolder>
               <Label>Title:</Label>
-              <Input />
+              <Input
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+              />
             </InputHolder>
             <InputHolder>
               <Label>Description:</Label>
-              <TextArea />
+              <TextArea
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
             </InputHolder>
             <InputHolder>
               <Label>Deadline:</Label>
-              <Input />
+              <Input
+                value={deadline}
+                onChange={(e) => {
+                  setDeadline(e.target.value);
+                }}
+              />
             </InputHolder>
           </Inputs>
           <ButttonHolder>
-            <Submit>Create</Submit>
+            <Submit onClick={postData}>Create</Submit>
           </ButttonHolder>
         </Holder>
       </Main>

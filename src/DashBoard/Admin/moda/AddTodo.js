@@ -42,7 +42,6 @@ const AddTodo = ({ onToggle }) => {
     setTitle("");
     setDescription("");
     setDeadline("");
-    window.location.reload();
   };
 
   return (
@@ -89,7 +88,14 @@ const AddTodo = ({ onToggle }) => {
             <Add onClick={reveal}>Add Members</Add>
           </Inputs>
           <ButttonHolder>
-            <Submit onClick={postData}>Create</Submit>
+            <Submit
+              onClick={() => {
+                postData();
+                onToggle();
+              }}
+            >
+              Create
+            </Submit>
             {show ? <MembersModa reveal={reveal} /> : null}
           </ButttonHolder>
         </Holder>

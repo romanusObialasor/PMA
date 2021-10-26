@@ -6,6 +6,7 @@ import { BsBell } from "react-icons/bs";
 import UserTodoCard from "./UserTodoCard";
 import { app } from "../../base";
 import UserNav from "./UserNav";
+import { useParams } from "react-router-dom";
 
 const MyProjects = () => {
   const [data, setData] = useState([]);
@@ -65,7 +66,7 @@ const MyProjects = () => {
           <Rest>
             {data?.map((props) => (
               <UserTodoCard
-                to="/project"
+                to={`/project/${props.id}`}
                 title={props.title}
                 description={props.description}
                 deadline={props.deadline}

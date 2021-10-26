@@ -35,7 +35,7 @@ const App = () => {
           <Route exact path="/user" component={UserOverView} />
           <Route exact path="/userProject/:id" component={UserProject} />
           <Route exact path="/myProjects" component={MyProjects} />
-          <Route exact path="/project" component={Project} />
+          <Route exact path="/project/:id" component={Project} />
           <Route exact path="/userCreate" component={UserCreate} />
         </Switch>
       </BrowserRouter>
